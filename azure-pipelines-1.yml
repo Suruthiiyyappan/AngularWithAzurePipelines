@@ -1,0 +1,41 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - task: CmdLine@2
+    displayName: "Build Angular app"
+    inputs:
+      script: 'ng build'
+
+  - task: CmdLine@2
+    displayName: "Validate Angular violations"
+    inputs:
+      script: "ng lint"
+  - task: PublishTestResults@2
+    displayName: "Publish Angular test results"
+    inputs:
+      testResultsFiles: "TestResults/junit/TESTS*.xml"
+      mergeTestResults: true
+      testRunTitle: "Angular Tests"
+
+  - task: PublishCodeCoverageResults@1
+    displayName: Publish code coverage
+    inputs:
+      codeCoverageTool: Cobertura
+      summaryFileLocation: "TestResults/coverage/cobertura-coverage.xml"
+      reportDirectory: "TestResults/coverage"
+  - task: PublishBuildArtifacts@1
+    displayName: "Publish Artifact: Angular"
+    inputs:
+      PathtoPublish: "$(Build.SourcesDirectory)/dist"
+      FileCopyOptions:
+      ArtifactName: "Angular"
+      publishLocation: "Container"
