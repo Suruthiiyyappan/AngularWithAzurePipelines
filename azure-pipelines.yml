@@ -10,7 +10,7 @@ stages:
   jobs:
   - job: Build
     pool:
-      vmImage: Default
+      name:'Default'
     steps:
       
       - script: |
