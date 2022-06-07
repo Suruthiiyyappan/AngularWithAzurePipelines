@@ -2,7 +2,7 @@ trigger:
 - master
 
 pool:
-  name: 'Default'
+  name: Default
 
 stages:
 - stage: Build
@@ -10,7 +10,7 @@ stages:
   jobs:
   - job: Build
     pool:
-      name:'Default'
+      name: Default
     steps:
       
       - script: |
