@@ -1,28 +1,22 @@
 trigger:
-- master
+- main
 
 pool:
   name: Default
 
-stages:
-- stage: Build
-  displayName: Build stage
-  jobs:
-  - job: Build
-    pool:
-      name: Default
-    steps:
-      
-      - script: |
-          cd AngularWithAzure/
-          npm install -g @angular/cli
-          npm install
-          ng build --prod
-        displayName: 'npm install and build'
-        workingDirectory: '$(Build.SourcesDirectory)'
+steps:
 
-      - task: PublishBuildArtifacts@1
-        inputs:
-          PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-          ArtifactName: 'drop'
-          publishLocation: 'Container'
+- script: |
+    npm install
+    npm run build
+  displayName: 'npm install and build'
+
+- task: CopyFiles@2
+  inputs:
+    Contents: 'build/**' # Pull the build directory (React)
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+- task: PublishBuildArtifacts@1
+  inputs: 
+    PathtoPublish: $(Build.ArtifactStagingDirectory) # dist or build files
+    ArtifactName: 'www' # output artifact named www
