@@ -10,42 +10,54 @@ pool:
   name: Default
 
 steps:
+# Installing the Node.js 
   - task: NodeTool@0
     displayName: "Install Node.js"
     inputs:
       versionSpec: 16.x
+
+# Installing the Angular CLI
   - task: Npm@1
     displayName: "Install Angular cli"
     inputs:
       command: "custom"
       customCommand: "install -g @angular/cli"
+
+#Instaling the NPM package
   - task: Npm@1
     displayName: "Install npm packages"
     inputs:
       command: "install"
       verbose: true
+
+#Build the Angular app
   - task: CmdLine@2
     displayName: "Build Angular app"
     inputs:
       script: 'ng build'
 
+#Validating the Angular violation
   - task: CmdLine@2
     displayName: "Validate Angular violations"
     inputs:
       script: "ng lint"
+
+#Run angular unit test
   - task: PublishTestResults@2
     displayName: "Publish Angular test results"
     inputs:
       testResultsFiles: "TestResults/junit/TESTS*.xml"
       mergeTestResults: true
       testRunTitle: "Angular Tests"
-
+# Publish codecoverage results
   - task: PublishCodeCoverageResults@1
     displayName: Publish code coverage
     inputs:
       codeCoverageTool: Cobertura
       summaryFileLocation: "TestResults/coverage/cobertura-coverage.xml"
       reportDirectory: "TestResults/coverage"
+
+# publish build artifacts
   - task: PublishBuildArtifacts@1
     displayName: "Publish Artifact: Angular"
     inputs:
