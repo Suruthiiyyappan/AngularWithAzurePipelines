@@ -50,12 +50,7 @@ steps:
       mergeTestResults: true
       testRunTitle: "Angular Tests"
 # Publish codecoverage results
-  - task: PublishCodeCoverageResults@1
-    displayName: Publish code coverage
-    inputs:
-      codeCoverageTool: Cobertura
-      summaryFileLocation: "TestResults/coverage/cobertura-coverage.xml"
-      reportDirectory: "TestResults/coverage"
+ 
 
 # publish build artifacts
   - task: PublishBuildArtifacts@1
